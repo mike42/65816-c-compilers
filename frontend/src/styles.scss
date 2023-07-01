@@ -2,3 +2,8 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+// Squash select boxes down significantly
+.mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}

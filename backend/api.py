@@ -37,10 +37,13 @@ async def do_compile(request: CompileRequest) -> CompileResponse:
                 input_file.write(request.code)
         except Exception as e:
             raise HTTPException(status_code=500, detail="Internal Server Error")
-
-            exit_code = subprocess.call(["wdc816cc", "-MS", "-A", "code.c"], cwd=d)
-            with open(os.path.join(d, 'code.asm'), 'r') as output_file:
+        try:
+            # exit_code = subprocess.call(["wdc816cc", "-MS", "-A", "code.c"], cwd=d)
+            exit_code = subprocess.call(["cc65816", "-S", "code.c"], cwd=d)
+            with open(os.path.join(d, 'code.s'), 'r') as output_file:
                 result = output_file.read()
+            # with open(os.path.join(d, 'code.asm'), 'r') as output_file:
+            #     result = output_file.read()
             return CompileResponse(asm=result)
         except Exception as e:
             return CompileResponse(asm="; Compile was unsuccessful \n;" + "\n; ".join(request.code.split("\n")))

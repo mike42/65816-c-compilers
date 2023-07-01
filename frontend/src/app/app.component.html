@@ -4,7 +4,7 @@
     <textarea style="width:100%; height: 12rem" [value]="code" (input)="onCodeChangew($event)"></textarea>
   </div>
   <div>
-    <button (click)="doCompile()">Go</button>
+    <button mat-button color="primary" (click)="doCompile()">Go</button>
   </div>
 
   <div *ngIf="loading">

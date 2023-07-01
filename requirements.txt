@@ -1,0 +1,2 @@
+fastapi[all]==0.89.1
+pydantic==1.10.4

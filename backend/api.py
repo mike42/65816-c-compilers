@@ -15,6 +15,10 @@ class CompileResponse(BaseModel):
     asm: str
 
 
+class CompilerSummary(BaseModel):
+    displayName: str
+
+
 api = FastAPI()
 
 
@@ -24,6 +28,11 @@ def api_main():
     Take user to the docs
     """
     return RedirectResponse("/api/docs")
+
+
+@api.get("/compiler", tags=["compile"])
+async def list_compilers() -> list[CompilerSummary]:
+    return []
 
 
 @api.post("/compile", tags=["compile"])

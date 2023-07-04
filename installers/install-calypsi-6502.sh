@@ -10,7 +10,7 @@ fi
 export CALYPSI_VERSION="4.4"
 
 # download and install calypsi 6502
-wget "https://github.com/hth313/Calypsi-tool-chains/releases/download/${CALYPSI_VERSION}/calypsi-6502-${CALYPSI_VERSION}.deb" -O "/tmp/calypsi-6502-${CALYPSI_VERSION}.deb"
+wget --quiet "https://github.com/hth313/Calypsi-tool-chains/releases/download/${CALYPSI_VERSION}/calypsi-6502-${CALYPSI_VERSION}.deb" -O "/tmp/calypsi-6502-${CALYPSI_VERSION}.deb"
 dpkg -i "/tmp/calypsi-6502-${CALYPSI_VERSION}.deb"
 rm "/tmp/calypsi-6502-${CALYPSI_VERSION}.deb"
 

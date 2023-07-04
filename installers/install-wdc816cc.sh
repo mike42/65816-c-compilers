@@ -15,7 +15,7 @@ WINEARCH=win32 WINEPREFIX="/opt/wdctools/" wineboot
 7z x WDCTOOLS.exe -o/opt/wdctools/drive_c/wdc
 find /opt/wdctools/
 
-# Output a wine/xvfb-run wrapper
+# Output a wine wrapper script
 echo -e '#!/bin/bash\nset -x\n(cd /opt/wdctools/drive_c/wdc/Tools/bin/ && WINEARCH=win32 WINEPREFIX="/opt/wdctools/" wine WDC816CC.exe $@)' > /usr/local/bin/wdc816cc
 chmod +x /usr/local/bin/wdc816cc
 
@@ -24,5 +24,5 @@ echo '' > /tmp/empty.c
 /usr/local/bin/wdc816cc /tmp/empty.c
 rm /tmp/empty.c /tmp/empty.obj
 
-# Ensure wineserver32 is no longer running - socket files confuse Docker
-pgrep --exact wineserver32 && killall --wait --exact wineserver32 || true
+# Ensure wineserver64 is no longer running - socket files confuse Docker
+pgrep --exact wineserver64 && killall --wait --exact wineserver64 || true

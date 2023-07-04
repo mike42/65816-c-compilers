@@ -49,7 +49,6 @@ COPY backend backend
 COPY requirements.txt .
 COPY --from=builder build/frontend/dist/web-compiler-frontend/ ./backend/static
 RUN python3 -m venv venv/ && \
-    ls && \
     ./venv/bin/pip install -r requirements.txt
 
-CMD ['./venv/bin/python3', 'backend/main.py']
+CMD ["./venv/bin/uvicorn", "backend.main:app", "--host", "0.0.0.0"]

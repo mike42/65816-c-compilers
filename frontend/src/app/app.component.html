@@ -9,13 +9,13 @@
   </mat-toolbar>
   <div class="button-row" style="display:flex;background: #4a4a4a;">
     <mat-form-field style="flex-grow: 1;">
-      <mat-select placeholder="No compiler selected">
-        <mat-option *ngFor="let compiler of compilers" [value]="compiler.value">
+      <mat-select [(ngModel)]="compilerModel" placeholder="No compiler selected">
+        <mat-option [disabled]="compiler.value != 'calypsi-65816'" *ngFor="let compiler of compilers" [value]="compiler.value">
           {{compiler.displayName}}
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <button mat-icon-button matTooltip="Compile now" color="accent"  (click)="doCompile()">
+    <button mat-icon-button matTooltip="Compile now" color="accent" (click)="doCompile()">
       <mat-icon>build</mat-icon>
     </button>
   </div>

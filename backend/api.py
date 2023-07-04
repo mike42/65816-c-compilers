@@ -32,7 +32,16 @@ def api_main():
 
 @api.get("/compiler", tags=["compile"])
 async def list_compilers() -> list[CompilerSummary]:
-    return []
+    return [
+        CompilerSummary(id="cc65", name="cc65 C compiler", target='6502', available=True),
+        CompilerSummary(id="calypsi-65816", name="Calypsi ISO C compiler for 65816", target='65816', available=True),
+        CompilerSummary(id="calypsi-6502", name="Calypsi ISO C compiler for 6502", target='6502', available=True),
+        CompilerSummary(id="wdc816cc", name="WDC C compiler", target='65816', available=True),
+        CompilerSummary(id="orca-c", name="ORCA/C", target='65816', available=True),
+        # ideas?
+        # CompilerSummary(id="mpw-c", name="MPW C", target='65816', available=False),
+        # CompilerSummary(id="tcc816", name="TCC 65816 Port", target='65816', available=False),
+    ]
 
 
 @api.post("/compile", tags=["compile"])

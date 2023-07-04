@@ -1,3 +1,4 @@
+backend/static
 frontend/dist
 frontend/.angular
 frontend/node_modules

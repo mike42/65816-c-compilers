@@ -4,6 +4,7 @@ import {Observable} from "rxjs";
 
 interface CompileRequest {
   code: string;
+  compiler: string;
 }
 
 interface CompileResponse {

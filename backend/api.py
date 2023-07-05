@@ -6,10 +6,15 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 
+from backend.compilers.calypsi_6502_wrapper import Calypsi6502Wrapper
+from backend.compilers.cc65_wrapper import Cc65Wrapper
 from backend.util import compiler_exists
+from backend.compilers.calypsi_65816_wrapper import Calypsi65816Wrapper
+from backend.compilers.wdc816cc_wrapper import Wdc816ccWrapper
 
 
 class CompileRequest(BaseModel):
+    compiler: str
     code: str
 
 
@@ -67,21 +72,19 @@ async def list_compilers() -> list[CompilerSummary]:
 @api.post("/compile", tags=["compile"])
 async def do_compile(request: CompileRequest) -> CompileResponse:
     """
-    Compilation process
+    Compilation process: Map to a compiler wrapper
     """
-    with tempfile.TemporaryDirectory(prefix='compile-') as d:
-        try:
-            with open(os.path.join(d, 'code.c'), 'w') as input_file:
-                input_file.write(request.code)
-        except Exception as e:
-            raise HTTPException(status_code=500, detail="Internal Server Error")
-        try:
-            # exit_code = subprocess.call(["wdc816cc", "-MS", "-A", "code.c"], cwd=d)
-            exit_code = subprocess.call(["cc65816", "-S", "code.c"], cwd=d)
-            with open(os.path.join(d, 'code.s'), 'r') as output_file:
-                result = output_file.read()
-            # with open(os.path.join(d, 'code.asm'), 'r') as output_file:
-            #     result = output_file.read()
-            return CompileResponse(asm=result)
-        except Exception as e:
-            return CompileResponse(asm="; Compile was unsuccessful \n;" + "\n; ".join(request.code.split("\n")))
+    wrapper_classes = {
+        'calypsi-6502': Calypsi6502Wrapper,
+        'calypsi-65816': Calypsi65816Wrapper,
+        'cc65': Cc65Wrapper,
+        'wdc816cc': Wdc816ccWrapper,
+    }
+    wrapper_class = wrapper_classes.get(request.compiler, None)
+    if wrapper_class is None:
+        return CompileResponse(asm="; Compiler is not supported")
+    wrapper = wrapper_class()
+    if not wrapper.is_available():
+        return CompileResponse(asm="; Compiler is not available")
+    result = wrapper.compile(request.code)
+    return CompileResponse(asm=result.asm)

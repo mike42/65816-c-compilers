@@ -46,7 +46,7 @@ export class AppComponent implements OnInit {
   doCompile() {
     this.loading = true;
     this.compilerService
-      .compile({code: this.code})
+      .compile({code: this.code, compiler: this.compilerModel})
       .subscribe({
         next: (result) => {
           this.result = result.asm;

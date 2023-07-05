@@ -8,6 +8,7 @@ from pydantic import BaseModel
 
 from backend.compilers.calypsi_6502_wrapper import Calypsi6502Wrapper
 from backend.compilers.cc65_wrapper import Cc65Wrapper
+from backend.compilers.orca_c_wrapper import OrcaCWrapper
 from backend.util import compiler_exists
 from backend.compilers.calypsi_65816_wrapper import Calypsi65816Wrapper
 from backend.compilers.wdc816cc_wrapper import Wdc816ccWrapper
@@ -79,6 +80,7 @@ async def do_compile(request: CompileRequest) -> CompileResponse:
         'calypsi-65816': Calypsi65816Wrapper,
         'cc65': Cc65Wrapper,
         'wdc816cc': Wdc816ccWrapper,
+        'orca-c': OrcaCWrapper,
     }
     wrapper_class = wrapper_classes.get(request.compiler, None)
     if wrapper_class is None:

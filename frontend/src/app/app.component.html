@@ -10,7 +10,7 @@
   <div class="button-row" style="display:flex;background: #4a4a4a;">
     <mat-form-field style="flex-grow: 1;">
       <mat-select [(ngModel)]="compilerModel" placeholder="No compiler selected">
-        <mat-option [disabled]="compiler.value != 'calypsi-65816'" *ngFor="let compiler of compilers" [value]="compiler.value">
+        <mat-option [disabled]="compiler.disabled" *ngFor="let compiler of compilers" [value]="compiler.value">
           {{compiler.displayName}}
         </mat-option>
       </mat-select>

@@ -1,10 +1,10 @@
-import {Component} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {FormControl} from "@angular/forms";
+import {Component, OnInit} from '@angular/core';
+import {CompilerService} from "./compiler.service";
 
 export interface Compiler {
   value: string;
   displayName: string;
+  disabled: boolean;
 }
 
 @Component({
@@ -12,14 +12,8 @@ export interface Compiler {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
-  compilers: Compiler[] = [
-    {value: 'cc65', displayName: 'cc65 C compiler'},
-    {value: 'calypsi-65816', displayName: 'Calypsi ISO C compiler for 65816'},
-    {value: 'calypsi-6502', displayName: 'Calypsi ISO C compiler for 6502'},
-    {value: 'wdc816cc', displayName: 'WDC C compiler'},
-    {value: 'orca-c', displayName: 'ORCA/C'},
-  ];
+export class AppComponent implements OnInit {
+  compilers: Compiler[] = [];
   code = "int sum_numbers_1_to_x(int x) {\n" +
     "    /* Add up all numbers in sequence 1..x */\n" +
     "    int i;\n" +
@@ -34,18 +28,35 @@ export class AppComponent {
   loading = false;
   compilerModel: string = "calypsi-65816";
 
-  constructor(private http: HttpClient) {
+  constructor(private compilerService: CompilerService) {
+  }
+
+  ngOnInit(): void {
+    this.compilers = [];
+    this.compilerService.listCompilers().subscribe({
+      next: (result) => {
+        this.compilers = result.map(x => {
+          return {value: x.id, displayName: x.name, disabled: !x.available}
+        })
+      },
+      error: (e) => console.error(e)
+    });
   }
 
   doCompile() {
     this.loading = true;
-    this.http.post<any>("/api/compile", {code: this.code}).subscribe(result => {
-      this.result = result.asm;
-      this.loading = false;
-    }, error => {
-      this.result = "; error";
-      this.loading = false;
-    });
+    this.compilerService
+      .compile({code: this.code})
+      .subscribe({
+        next: (result) => {
+          this.result = result.asm;
+          this.loading = false;
+        },
+        error: (e) => {
+          this.result = "; error";
+          this.loading = false;
+        }
+      });
   }
 
   public onCodeChange(event: Event) {

@@ -13,7 +13,6 @@ WINEARCH=win32 WINEPREFIX="/opt/wdctools/" wineboot
 
 # Extract WDCTOOLS.exe manually via 7zip
 7z x WDCTOOLS.exe -o/opt/wdctools/drive_c/wdc
-find /opt/wdctools/
 
 # Output a wine wrapper script
 echo -e '#!/bin/bash\nset -x\n(cd /opt/wdctools/drive_c/wdc/Tools/bin/ && WINEARCH=win32 WINEPREFIX="/opt/wdctools/" wine WDC816CC.exe $@)' > /usr/local/bin/wdc816cc

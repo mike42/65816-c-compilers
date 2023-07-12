@@ -22,11 +22,32 @@ FROM ubuntu:22.04
 # Install anything we need from the package manager, including cc65 open source compiler (6502 target only)
 RUN dpkg --add-architecture i386 && \
     apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get -qq install python3-venv libtinfo5 cc65 wine32 wine64 xvfb p7zip-full wget libnuma1 psmisc
+    DEBIAN_FRONTEND=noninteractive apt-get -q -y install \
+    cc65 \
+    libavcodec58 \
+    libavformat58 \
+    libavutil56 \
+    libc6-i386 \
+    libegl1 \
+    libfuse2 \
+    libgif7 \
+    libglu1 fuse \
+    libglu1-mesa \
+    libnuma1 \
+    libtinfo5 \
+    p7zip-full \
+    psmisc \
+    python3-venv \
+    unar \
+    unzip \
+    wget \
+    wine32 \
+    wine64 \
+    xvfb
 
 COPY /installers /installers
 
-# Install proprietary compilers which scripts can fetch themselves
+# Install proprietary compilers, fetched via install script
 RUN cd installers && \
     ./install-calypsi-6502.sh && \
     ./install-calypsi-65816.sh
@@ -43,6 +64,13 @@ RUN cd installers && \
 # The install script requires the file 'ByteWorks' and 'Golden Gate.msi' to be present in the installers/ directory.
 RUN cd installers && \
     ./install-orca.sh
+
+# Install proprietary MPW IIgs tools, which must be purchased from the Juiced.GS store
+# - https://juiced.gs/store/apda-software/
+# The install script requires the file 'MPW IIgs.sit' to be present in the installers/ directory
+RUN cd installers && \
+    ./install-mpw.sh
+
 
 WORKDIR /app
 COPY backend backend

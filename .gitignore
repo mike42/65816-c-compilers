@@ -163,3 +163,4 @@ cython_debug/
 installers/*.exe
 installers/ByteWorks
 installers/*.msi
+installers/*.sit
